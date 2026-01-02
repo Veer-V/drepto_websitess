@@ -1,6 +1,7 @@
 
 
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import BackButton from './BackButton';
 import { UserRole } from '../types';
@@ -21,6 +22,7 @@ const Register: React.FC<RegisterProps> = ({ onToggleView }) => {
     password: '',
     confirmPassword: '',
   });
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [error, setError] = useState('');
   const { register } = useAuth();
 
@@ -37,6 +39,11 @@ const Register: React.FC<RegisterProps> = ({ onToggleView }) => {
     }
     if (password !== confirmPassword) {
       setError('Passwords do not match.');
+      setError('Passwords do not match.');
+      return;
+    }
+    if (!agreedToTerms) {
+      setError('You must agree to the Terms and Conditions.');
       return;
     }
     setError('');
@@ -91,6 +98,19 @@ const Register: React.FC<RegisterProps> = ({ onToggleView }) => {
         <input type="password" name="confirmPassword" placeholder="Confirm Password" onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary" />
 
         {error && <p className="text-red-500 text-sm">{error}</p>}
+
+        <div className="flex items-center gap-2 my-3">
+          <input
+            type="checkbox"
+            id="terms"
+            checked={agreedToTerms}
+            onChange={(e) => setAgreedToTerms(e.target.checked)}
+            className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary focus:ring-2 cursor-pointer"
+          />
+          <label htmlFor="terms" className="text-sm text-gray-600 cursor-pointer select-none">
+            I agree to the <Link to="/terms" className="text-primary font-semibold hover:underline">Terms and Conditions</Link>
+          </label>
+        </div>
 
         <button type="submit" className="w-full bg-primary text-white font-bold py-3 rounded-lg hover:bg-blue-600 transition-colors">
           Sign Up

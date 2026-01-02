@@ -6,7 +6,7 @@ interface AuthContextType {
   user: User | null;
   login: (identifier: string) => void;
   logout: () => void;
-  register: (details: Omit<User, 'id' | 'role'>) => void;
+  register: (details: Omit<User, 'id'>) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -64,13 +64,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setUser(null);
   };
 
-  const register = (details: Omit<User, 'id' | 'role'>) => {
+  const register = (details: Omit<User, 'id'>) => {
     // Mock registration logic - Default to Patient
     console.log('Registering user:', details);
     const newUser: User = {
       id: Date.now().toString(),
       ...details,
-      role: UserRole.PATIENT, // Force patient role for new registrations
     };
     setUser(newUser);
   };
