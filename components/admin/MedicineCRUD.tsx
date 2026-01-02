@@ -133,7 +133,7 @@ const MedicineCRUD = () => {
   };
 
   const save = () => {
-    const requiredFields = ['name', 'brand', 'price', 'mrp']; // Reduced strictness for easier testing, can increase later
+    const requiredFields = ['price', 'mrp']; // Reduced strictness for easier testing, can increase later
     for (const f of requiredFields) {
       const v = String(form[f] ?? '').trim();
       if (!v || (['price', 'mrp'].includes(f) && Number(form[f]) <= 0)) {
