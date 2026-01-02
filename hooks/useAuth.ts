@@ -1,0 +1,91 @@
+
+import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { User, UserRole } from '../types';
+
+interface AuthContextType {
+  user: User | null;
+  login: (identifier: string) => void;
+  logout: () => void;
+  register: (details: Omit<User, 'id' | 'role'>) => void;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [user, setUser] = useState<User | null>(null);
+
+  const login = (identifier: string) => {
+    // Determine Role Logic (Universal Login)
+    let role = UserRole.PATIENT;
+    const lowerId = identifier.toLowerCase();
+
+    if (lowerId.includes('admin')) {
+      // Admin logic usually handled separate, but for mock purposes:
+      // In real app, AdminLogin component handles this separately or we redirect
+    } else if (lowerId.includes('dr') || lowerId.includes('doc')) {
+      role = UserRole.DOCTOR;
+    } else if (lowerId.includes('nurse')) {
+      role = UserRole.NURSE;
+    }
+
+    console.log(`Logging in using Universal Login for: ${identifier} -> Detected Role: ${role}`);
+
+    // Generate dynamic name
+    let firstName = 'User';
+    let lastName = 'Test';
+
+    if (identifier.includes('@')) {
+      const namePart = identifier.split('@')[0];
+      if (namePart.includes('.')) {
+        firstName = namePart.split('.')[0];
+        lastName = namePart.split('.')[1] || 'User';
+      } else {
+        firstName = namePart;
+      }
+    } else {
+      firstName = identifier;
+    }
+
+    // Capitalize
+    firstName = firstName.charAt(0).toUpperCase() + firstName.slice(1);
+    lastName = lastName.charAt(0).toUpperCase() + lastName.slice(1);
+
+    const mockUser: User = {
+      id: '123',
+      firstName,
+      lastName,
+      email: identifier.includes('@') ? identifier : `${identifier}@example.com`,
+      role,
+    };
+    setUser(mockUser);
+  };
+
+  const logout = () => {
+    setUser(null);
+  };
+
+  const register = (details: Omit<User, 'id' | 'role'>) => {
+    // Mock registration logic - Default to Patient
+    console.log('Registering user:', details);
+    const newUser: User = {
+      id: Date.now().toString(),
+      ...details,
+      role: UserRole.PATIENT, // Force patient role for new registrations
+    };
+    setUser(newUser);
+  };
+
+  return React.createElement(
+    AuthContext.Provider,
+    { value: { user, login, logout, register } },
+    children
+  );
+};
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};

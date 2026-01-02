@@ -1,0 +1,109 @@
+
+
+import React, { useState } from 'react';
+import { useAuth } from '../hooks/useAuth';
+import BackButton from './BackButton';
+import { UserRole } from '../types';
+
+interface RegisterProps {
+  onToggleView: () => void;
+}
+
+const Register: React.FC<RegisterProps> = ({ onToggleView }) => {
+  const [formData, setFormData] = useState({
+    role: UserRole.PATIENT,
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    gender: '',
+    age: '',
+    password: '',
+    confirmPassword: '',
+  });
+  const [error, setError] = useState('');
+  const { register } = useAuth();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const { password, confirmPassword, ...userDetails } = formData;
+    if (Object.values(userDetails).some(field => field === '')) {
+      setError('Please fill in all fields.');
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError('Passwords do not match.');
+      return;
+    }
+    setError('');
+    register({
+      firstName: userDetails.firstName,
+      lastName: userDetails.lastName,
+      email: userDetails.email,
+      role: userDetails.role,
+    });
+  };
+
+  return (
+    <div>
+      <div className="mb-4">
+        <BackButton />
+      </div>
+      <h2 className="text-2xl font-bold text-center text-dark-blue mb-6">Create Account</h2>
+      <form onSubmit={handleSubmit} className="space-y-3">
+
+        {/* Role Selection */}
+        <div className="relative">
+          <label className="text-xs font-semibold text-gray-500 ml-1 mb-1 block">I am a</label>
+          <select
+            name="role"
+            value={formData.role}
+            onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary bg-white text-gray-700 font-medium"
+          >
+            <option value={UserRole.PATIENT}>Patient</option>
+            <option value={UserRole.DOCTOR}>Doctor</option>
+            <option value={UserRole.NURSE}>Nurse</option>
+          </select>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <input type="text" name="firstName" placeholder="First Name" onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary" />
+          <input type="text" name="lastName" placeholder="Last Name" onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary" />
+        </div>
+        <input type="email" name="email" placeholder="Email ID" onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary" />
+        <input type="tel" name="phone" placeholder="Phone Number" onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary" />
+        <div className="grid grid-cols-2 gap-3">
+          <select name="gender" onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary text-gray-500">
+            <option value="">Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+          <input type="number" name="age" placeholder="Age" onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary" />
+        </div>
+
+        <input type="password" name="password" placeholder="Password" onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary" />
+        <input type="password" name="confirmPassword" placeholder="Confirm Password" onChange={handleChange} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-primary focus:border-primary" />
+
+        {error && <p className="text-red-500 text-sm">{error}</p>}
+
+        <button type="submit" className="w-full bg-primary text-white font-bold py-3 rounded-lg hover:bg-blue-600 transition-colors">
+          Sign Up
+        </button>
+      </form>
+      <p className="text-center text-sm text-gray-600 mt-4">
+        Already have an account?{' '}
+        <button onClick={onToggleView} className="font-semibold text-primary hover:underline">
+          Sign In
+        </button>
+      </p>
+    </div>
+  );
+};
+
+export default Register;

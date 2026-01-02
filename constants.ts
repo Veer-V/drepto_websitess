@@ -1,0 +1,43 @@
+
+import { Medicine, FAQItem, Testimonial, LabTestDetail, LabPackageDetail, LabReview, City } from './types';
+
+export const MEDICINES: Medicine[] = [];
+
+export const PHARMACY_FAQS: FAQItem[] = [
+    { question: 'Is it safe to buy medicines online?', answer: 'Yes, we ensure all medicines are sourced from licensed pharmacies and are 100% genuine.' },
+    { question: 'Do I need a prescription?', answer: 'For certain scheduled drugs (Schedule H & H1), a valid prescription is mandatory. OTC products do not require one.' },
+    { question: 'How can I track my order?', answer: 'You can track your order status in the "My Orders" section of the app or website.' },
+    { question: 'What is the return policy?', answer: 'We have a 7-day return policy for damaged or incorrect items. Please check our return policy page for more details.' },
+];
+
+export const PHARMACY_TESTIMONIALS: Testimonial[] = [
+    { name: 'Amit Sharma', location: 'Delhi', quote: 'Super fast delivery! Got my medicines within 2 hours. Highly recommended.' },
+    { name: 'Priya Patel', location: 'Mumbai', quote: 'Genuine medicines and great discounts. The app is very easy to use.' },
+    { name: 'Rahul Verma', location: 'Bangalore', quote: 'Customer support is excellent. They helped me find a substitute for a medicine that was out of stock.' },
+    { name: 'Sneha Gupta', location: 'Hyderabad', quote: 'I order for my parents regularly. The subscription feature ensures they never run out of meds.' },
+];
+
+// --- Lab Data ---
+
+export const CITIES: City[] = [
+    { id: 'mumbai', name: 'Mumbai' },
+    { id: 'delhi', name: 'Delhi' },
+    { id: 'bengaluru', name: 'Bengaluru' },
+    { id: 'hyderabad', name: 'Hyderabad' },
+    { id: 'pune', name: 'Pune' },
+    { id: 'kolkata', name: 'Kolkata' },
+    { id: 'ahmedabad', name: 'Ahmedabad' },
+    { id: 'chennai', name: 'Chennai' },
+    { id: 'jaipur', name: 'Jaipur' },
+    { id: 'nagpur', name: 'Nagpur' },
+];
+
+export const LAB_TESTS_DATA: LabTestDetail[] = [];
+
+export const LAB_PACKAGES_DATA: LabPackageDetail[] = [];
+
+export const LAB_REVIEWS: LabReview[] = [
+    { id: '1', userName: 'Suresh Raina', date: '2 days ago', rating: 5, comment: 'Excellent service. The phlebotomist arrived on time and was very professional.' },
+    { id: '2', userName: 'Anjali Menon', date: '1 week ago', rating: 4, comment: 'Reports were delivered on time via email. Good experience.' },
+    { id: '3', userName: 'Vikram Singh', date: '3 weeks ago', rating: 5, comment: 'Very affordable packages compared to local labs. Highly recommend.' },
+];
